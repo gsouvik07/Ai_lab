@@ -1,0 +1,715 @@
+Tic Tac random
+import numpy as np
+import random
+def create_board():
+    return (np.array([["","",""],["","",""],["","",""]]))
+def empty_place(board):
+    l=[]
+    for i in range(3):
+        for j in range(3):
+            if(board[i,j]==""):
+                l.append((i,j))
+    return l
+def insert_ply(board,player):
+    curr_board=empty_place(board)
+    if(player==1):
+        idx=random.choice(curr_board)
+        board[idx]="X"
+    else:
+        i=int(input("Enter Row..."))
+        j=int(input("Enter Column..."))
+        board[i,j]="O"
+    return board
+def isWin(board,s1,s2):
+    win=False
+    for i in range(3):
+        if(board[i][0]==board[i][1]==board[i][2]==s1):
+            win=True
+            print("Player "+s1+" , You Won!")
+            break
+        elif(board[i][0]==board[i][1]==board[i][2]==s2):
+            win=True
+            print("Player "+s2+" , You Won!")
+            break
+    for i in range(3):
+        if(board[0][i]==board[1][i]==board[2][i]==s1):
+            win=True
+            print("Player "+s1+" , You Won!")
+            break
+        elif(board[0][i]==board[1][i]==board[2][i]==s2):
+            win=True
+            print("Player "+s2+" , You Won!")
+            break
+    if(board[0][0]==board[1][1]==board[2][2]==s1):
+            win=True
+            print("Player "+s1+" , You Won!")
+    if(board[0][0]==board[1][1]==board[2][2]==s2):
+            win=True
+            print("Player "+s2+" , You Won!")
+    if(board[0][2]==board[1][1]==board[2][0]==s1):
+            win=True
+            print("Player "+s1+" , You Won!")
+    if(board[0][2]==board[1][1]==board[2][0]==s2):
+            win=True
+            print("Player "+s2+" , You Won!")
+    return win
+def printBoard(board):
+    for i in range(3):
+        print(board[i,0]," ",board[i,1]," ",board[i,2])
+        print("__|__|__")
+   def evaluate(board):
+    winner=0
+    for player in range(2):
+        if(isWin(board,"X","O")):
+            winner=player+1
+        if(np.all(board!="") and winner==0):
+            winner=-1
+    return winner
+        def playgame():
+    board=create_board()
+    win=0
+    mov=1
+    printBoard(board)
+    while win==0:
+        for player in range(2):
+            board=insert_ply(board,player+1)
+            print("Board After "+str(mov)+"move")
+            printBoard(board)
+            mov+=1
+            win=evaluate(board)
+            if(win!=0):
+                break
+playgame()
+
+Tic Tac 2pl
+
+
+def main():
+# The main function
+    introduction = intro()
+    board = create_grid()
+    pretty = printPretty(board)
+    symbol_1, symbol_2 = sym()
+    full = isFull(board, symbol_1, symbol_2) # The function that starts the game is also in here.
+    
+
+    
+
+
+def intro():
+# This function introduces the rules of the game Tic Tac Toe
+    print("Hello! Welcome to Pam's Tic Tac Toe game!")
+    print("\n")
+    print("Rules: Player 1 and player 2, represented by X and O, take turns "
+          "marking the spaces in a 3*3 grid. The player who succeeds in placing "
+          "three of their marks in a horizontal, vertical, or diagonal row wins.")
+    print("\n")
+    input("Press enter to continue.")
+    print("\n")
+
+
+
+def create_grid():
+# This function creates a blank playboard
+    print("Here is the playboard: ")
+    board = [[" ", " ", " "],
+             [" ", " ", " "],
+             [" ", " ", " "]]        
+    return board
+
+
+
+def sym():
+# This function decides the players' symbols
+    symbol_1 = input("Player 1, do you want to be X or O? ")
+    if symbol_1 == "X":
+        symbol_2 = "O"
+        print("Player 2, you are O. ")
+    else:
+        symbol_2 = "X"
+        print("Player 2, you are X. ")
+    input("Press enter to continue.")
+    print("\n")
+    return (symbol_1, symbol_2)
+
+
+
+def startGamming(board, symbol_1, symbol_2, count):
+# This function starts the game.
+
+    # Decides the turn
+    if count % 2 == 0:
+        player = symbol_1
+    elif count % 2 == 1:
+        player = symbol_2
+    print("Player "+ player + ", it is your turn. ")
+    row = int(input("Pick a row:"
+                    "[upper row: enter 0, middle row: enter 1, bottom row: enter 2]:"))
+    column = int(input("Pick a column:"
+                       "[left column: enter 0, middle column: enter 1, right column enter 2]"))
+
+
+    # Check if players' selection is out of range
+    while (row > 2 or row < 0) or (column > 2 or column < 0):
+        outOfBoard(row, column)
+        row = int(input("Pick a row[upper row:"
+                        "[enter 0, middle row: enter 1, bottom row: enter 2]:"))
+        column = int(input("Pick a column:"
+                           "[left column: enter 0, middle column: enter 1, right column enter 2]"))
+
+        # Check if the square is already filled
+    while (board[row][column] == symbol_1)or (board[row][column] == symbol_2):
+        filled = illegal(board, symbol_1, symbol_2, row, column)
+        row = int(input("Pick a row[upper row:"
+                        "[enter 0, middle row: enter 1, bottom row: enter 2]:"))
+        column = int(input("Pick a column:"
+                            "[left column: enter 0, middle column: enter 1, right column enter 2]"))    
+        
+    # Locates player's symbol on the board
+    if player == symbol_1:
+        board[row][column] = symbol_1
+            
+    else:
+        board[row][column] = symbol_2
+    
+    return (board)
+
+
+
+def isFull(board, symbol_1, symbol_2):
+    count = 1
+    winner = True
+# This function check if the board is full
+    while count < 10 and winner == True:
+        gaming = startGamming(board, symbol_1, symbol_2, count)
+        pretty = printPretty(board)
+        
+        if count == 9:
+            print("The board is full. Game over.")
+            if winner == True:
+                print("There is a tie. ")
+
+        # Check if here is a winner
+        winner = isWinner(board, symbol_1, symbol_2, count)
+        count += 1
+    if winner == False:
+        print("Game over.")
+        
+    # This is function gives a report 
+    report(count, winner, symbol_1, symbol_2)
+
+
+
+def outOfBoard(row, column):
+# This function tells the players that their selection is out of range
+    print("Out of boarder. Pick another one. ")
+    
+    
+
+def printPretty(board):
+# This function prints the board nice!
+    rows = len(board)
+    cols = len(board)
+    print("---+---+---")
+    for r in range(rows):
+        print(board[r][0], " |", board[r][1], "|", board[r][2])
+        print("---+---+---")
+    return board
+
+
+
+def isWinner(board, symbol_1, symbol_2, count):
+# This function checks if any winner is winning
+    winner = True
+    # Check the rows
+    for row in range (0, 3):
+        if (board[row][0] == board[row][1] == board[row][2] == symbol_1):
+            winner = False
+            print("Player " + symbol_1 + ", you won!")
+   
+        elif (board[row][0] == board[row][1] == board[row][2] == symbol_2):
+            winner = False
+            print("Player " + symbol_2 + ", you won!")
+            
+            
+    # Check the columns
+    for col in range (0, 3):
+        if (board[0][col] == board[1][col] == board[2][col] == symbol_1):
+            winner = False
+            print("Player " + symbol_1 + ", you won!")
+        elif (board[0][col] == board[1][col] == board[2][col] == symbol_2):
+            winner = False
+            print("Player " + symbol_2 + ", you won!")
+
+    # Check the diagnoals
+    if board[0][0] == board[1][1] == board[2][2] == symbol_1:
+        winner = False 
+        print("Player " + symbol_1 + ", you won!")
+
+    elif board[0][0] == board[1][1] == board[2][2] == symbol_2:
+        winner = False
+        print("Player " + symbol_2 + ", you won!")
+
+    elif board[0][2] == board[1][1] == board[2][0] == symbol_1:
+        winner = False
+        print("Player " + symbol_1 + ", you won!")
+
+    elif board[0][2] == board[1][1] == board[2][0] == symbol_2:
+        winner = False
+        print("Player " + symbol_2 + ", you won!")
+
+    return winner
+    
+
+
+def illegal(board, symbol_1, symbol_2, row, column):
+    print("The square you picked is already filled. Pick another one.")
+
+    
+def report(count, winner, symbol_1, symbol_2):
+    print("\n")
+    input("Press enter to see the game summary. ")
+    if (winner == False) and (count % 2 == 1 ):
+        print("Winner : Player " + symbol_1 + ".")
+    elif (winner == False) and (count % 2 == 0 ):
+        print("Winner : Player " + symbol_2 + ".")
+    else:
+        print("There is a tie. ")
+
+# Call Main
+main()
+
+Water jug
+
+def pour_water(ja,jb):
+    print("%d \t%d "%(ja,jb))
+    if(jb==fill):
+        return
+    elif(jb==max2):
+        pour_water(0,ja)
+    elif(ja!=0 and jb==0):
+        pour_water(0,ja)
+    elif ja==fill:
+        pour_water(ja,0)
+    elif ja<max1:
+        pour_water(max1,jb)
+    elif ja<(max2-jb):
+        pour_water(0,(ja+jb))
+    else:
+        pour_water(ja-(max2-jb),(max2-jb)+jb)
+max1=int(input("Enter Max capacity of Juga"))
+max2=int(input("Enter max capacity of Jugb"))
+fill=int(input("Enter the quantity to fill jugb:"))
+print("Jug A \t Jug B")
+pour_water(0,0)
+
+BFS
+import heapq
+graph_relation={
+    "S":["A","B","C"],
+    "A": ["D","E","G"],
+    "B":["G"],
+    "C":["G"],
+    "D":[],
+    "E":[],
+    "G":[],
+}
+
+heuristic ={
+    "S":8,
+    "A":8,
+    "B":2,
+    "C":3,
+    "D":-1,
+    "E":-1,
+    "G":0,
+}
+def bfs(gr,start,goal,hr):
+    gr=graph_relation
+    hr=heuristic
+    start="S"
+    goal="G"
+    que=[(hr[start],start)]
+    vis={}
+    vis[start]=None
+    while que:
+        _,curr=heapq.heappop(que)
+        type(_)
+        if curr==goal:
+            break
+        for neg in gr[curr]:
+            if neg not in vis:
+                heapq.heappush(que,(hr[neg],neg))
+                vis[neg]=curr
+    return vis
+start_node='S'
+goal_node='G'
+vis=bfs(graph_relation,start_node,goal_node,heuristic)
+print(vis)
+node=goal_node
+path=[node]
+while node!=start_node:
+    node=vis[node]
+    path.append(node)
+path.reverse()
+print("BFS path From",start_node,"to",goal_node,":",path)
+
+Comp vs Human
+
+import math
+
+def initialize_board():
+    return [[' ' for _ in range(3)] for _ in range(3)]
+
+def print_board(board):
+    for row in board:
+        print('|'.join(row))
+        print('-' * 5)
+
+def check_winner(board):
+    for i in range(3):
+        if board[i][0] == board[i][1] == board[i][2] != ' ':
+            return board[i][0]
+        if board[0][i] == board[1][i] == board[2][i] != ' ':
+            return board[0][i]
+    if board[0][0] == board[1][1] == board[2][2] != ' ':
+        return board[0][0]
+    if board[0][2] == board[1][1] == board[2][0] != ' ':
+        return board[0][2]
+    return None
+
+def is_full(board):
+    return all(cell != ' ' for row in board for cell in row)
+
+def minimax(board, is_maximizing):
+    winner = check_winner(board)
+    if winner == 'O':
+        return 1
+    elif winner == 'X':
+        return -1
+    elif is_full(board):
+        return 0
+
+    if is_maximizing:
+        best_score = -math.inf
+        for i in range(3):
+            for j in range(3):
+                if board[i][j] == ' ':
+                    board[i][j] = 'O'
+                    score = minimax(board, False)
+                    board[i][j] = ' '
+                    best_score = max(score, best_score)
+        return best_score
+    else:
+        best_score = math.inf
+        for i in range(3):
+            for j in range(3):
+                if board[i][j] == ' ':
+                    board[i][j] = 'X'
+                    score = minimax(board, True)
+                    board[i][j] = ' '
+                    best_score = min(score, best_score)
+        return best_score
+
+def computer_move(board):
+    best_score = -math.inf
+    move = None
+    for i in range(3):
+        for j in range(3):
+            if board[i][j] == ' ':
+                board[i][j] = 'O'
+                score = minimax(board, False)
+                board[i][j] = ' '
+                if score > best_score:
+                    best_score = score
+                    move = (i, j)
+    if move:
+        board[move[0]][move[1]] = 'O'
+
+def play_game():
+    board = initialize_board()
+    print("Welcome to Tic Tac Toe! You are X, and the computer is O.")
+    print_board(board)
+
+    while True:
+        while True:
+            try:
+                row, col = map(int, input("Enter your move (row and column 0-2, separated by space): ").split())
+                if board[row][col] == ' ':
+                    board[row][col] = 'X'
+                    break
+                else:
+                    print("Cell is already occupied. Try again.")
+            except (ValueError, IndexError):
+                print("Invalid input. Enter row and column as two integers between 0 and 2.")
+
+        print_board(board)
+        if check_winner(board) == 'X':
+            print("Congratulations! You win!")
+            break
+        if is_full(board):
+            print("It's a draw!")
+            break
+
+        computer_move(board)
+        print("Computer's move:")
+        print_board(board)
+        if check_winner(board) == 'O':
+            print("The computer wins. Better luck next time!")
+            break
+        if is_full(board):
+            print("It's a draw!")
+            break
+
+play_game()
+
+A star
+
+def aStarAlgo(s_node, g_node):
+    open_set = set([s_node])
+    closed_set = set()
+    g = {}
+    parents = {}
+    
+    g[s_node] = 0
+    parents[s_node] = s_node
+    
+    while len(open_set) > 0:
+        n = None
+        for v in open_set:
+            if n is None or g[v] + heuristic(v) < g[n] + heuristic(n):
+                n = v
+                
+        if n is None:
+            print('Path does not exist!')
+            return None
+        
+        if n == g_node:
+            path = []
+            while parents[n] != n:
+                path.append(n)
+                n = parents[n]
+            path.append(s_node)
+            path.reverse()
+            print('Path found: {}'.format(path))
+            return path
+        
+        open_set.remove(n)
+        closed_set.add(n)
+        
+        for (m, weight) in get_neighbors(n):
+            if m in closed_set:
+                continue
+            
+            if m not in open_set:
+                open_set.add(m)
+                parents[m] = n
+                g[m] = g[n] + weight
+            elif g[m] > g[n] + weight:
+                parents[m] = n
+                g[m] = g[n] + weight
+                
+                if m in closed_set:
+                    closed_set.remove(m)
+                    open_set.add(m)
+    
+    print('Path does not exist!')
+    return None
+
+def get_neighbors(v):
+    if v in Graph_nodes:
+        return Graph_nodes[v]
+    else:
+        return []
+
+def heuristic(n):
+    H_dist = {
+        'A': 11,
+        'B': 6,
+        'C': 99,
+        'D': 1,
+        'E': 7,
+        'G': 0,
+    }
+    return H_dist.get(n, float('inf'))
+
+Graph_nodes = {
+    'A': [('B', 2), ('E', 3)],
+    'B': [('A', 2), ('C', 1), ('G', 9)],
+    'C': [('B', 1)],
+    'D': [('E', 6), ('G', 1)],
+    'E': [('A', 3), ('D', 6)],
+    'G': [('B', 9), ('D', 1)]
+}
+
+aStarAlgo('A', 'G')
+
+Minmax
+import math
+
+def minimax(curDepth, nodeIndex, maxTurn, scores, targetDepth):
+    # Base case: if we've reached the target depth, return the score at this node
+    if curDepth == targetDepth:
+        print(f'Base case reached at depth {curDepth} with nodeIndex {nodeIndex}')
+        return scores[nodeIndex]
+    
+    if maxTurn:
+        # Maximize the value
+        print('Maximizing at depth', curDepth, 'with nodeIndex', nodeIndex)
+        amaxturn = minimax(curDepth + 1, nodeIndex * 2, False, scores, targetDepth)
+        print('_________Under A max Turn______')
+        print('amaxturn Value:', amaxturn)
+        print('Current Depth:', curDepth, 'NodeIndex:', nodeIndex, 'TargetDepth:', targetDepth)
+        
+        bmaxturn = minimax(curDepth + 1, nodeIndex * 2 + 1, False, scores, targetDepth)
+        print('_________Under A max Turn______')
+        print('bmaxturn Value:', bmaxturn)
+        
+        result = max(amaxturn, bmaxturn)
+        print('Returning max value:', result)
+        return result
+    else:
+        # Minimize the value
+        print('Minimizing at depth', curDepth, 'with nodeIndex', nodeIndex)
+        aminturn = minimax(curDepth + 1, nodeIndex * 2, True, scores, targetDepth)
+        bminturn = minimax(curDepth + 1, nodeIndex * 2 + 1, True, scores, targetDepth)
+        
+        result = min(aminturn, bminturn)
+        print('Returning min value:', result)
+        return result
+
+# Driver code
+scores = [3, 5, 2, 9, 12, 5, 23, 23]
+treeDepth = int(math.log2(len(scores)))  # Correctly calculate the depth of the tree
+
+print("The optimal value is:", minimax(0, 0, True, scores, treeDepth))
+
+Naive_Bayes
+
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+dataset=pd.read_csv('IrisDataset.csv')
+x=dataset.iloc[:,:4].values
+y=dataset['Species'].values
+dataset.head(10)
+from sklearn.model_selection import train_test_split
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=.17)
+from sklearn.preprocessing import StandardScaler
+sc=StandardScaler()
+x_train=sc.fit_transform(x_train)
+x_test=sc.transform(x_test)
+from sklearn.naive_bayes import GaussianNB
+classifier=GaussianNB()
+classifier.fit(x_train,y_train)
+y_pred=classifier.predict(x_test)
+y_pred
+from sklearn.metrics import confusion_matrix
+cm=confusion_matrix(y_test,y_pred)
+from sklearn.metrics import accuracy_score
+print("Accuracy : ",accuracy_score(y_test,y_pred))
+cm
+df=pd.DataFrame({'Real Values':y_test,'predicted values ':y_pred})
+df
+
+D_Tree
+
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.tree import DecisionTreeClassifier
+from sklearn import tree
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
+
+col_names = ['pregnant','glucose','bp','skin','insulin','bmi','pedigree','age','label']
+pima = pd.read_csv("diabetes.csv",header=None, names=col_names)
+
+pima[col_names] = pima[col_names].apply(pd.to_numeric,errors='coerce')
+
+pima.dropna(inplace=True)
+
+feature_cols=['pregnant','insulin','bmi','age','glucose','bp','pedigree']
+x=pima[feature_cols]
+y=pima['label']
+
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.3,random_state=4)
+clf=DecisionTreeClassifier(criterion="entropy" ,max_depth=3)
+
+
+clf=clf.fit(x_train,y_train)
+y_pred=clf.predict(x_test)
+
+print("Accuracy:" ,metrics.accuracy_score(y_test,y_pred))
+
+df=pd.DataFrame({'Real values':y_test,'Predicted values':y_pred})
+df
+
+x_train.shape,x_test.shape
+
+plt.figure(figsize=(12,8))
+tree.plot_tree(clf.fit(x_train,y_train))
+
+Bayesian Network
+
+import numpy as np
+import pandas as pd
+from pgmpy.models import BayesianModel
+from pgmpy.estimators import MaximumLikelihoodEstimator
+from pgmpy.inference import VariableElimination
+
+# Load and preprocess the dataset
+heart_disease = pd.read_csv('heart.csv')
+heart_disease.replace('?', np.nan, inplace=True)
+print("Sample instances from the dataset:")
+print(heart_disease.head())
+
+# Check for missing values
+print("\nChecking for missing values:")
+print(heart_disease.isnull().sum())
+heart_disease.dropna(inplace=True)
+
+# Convert categorical columns to appropriate data type
+categorical_cols = ['sex', 'cp', 'fbs', 'restecg', 'exang', 'ca']
+for col in categorical_cols:
+    heart_disease[col] = heart_disease[col].astype('category')
+
+# Ensure 'age' is numeric
+heart_disease['age'] = pd.to_numeric(heart_disease['age'], errors='coerce')
+print("\nUnique values for 'age':")
+print(heart_disease['age'].unique())
+
+# Define the Bayesian Network structure
+model = BayesianModel([
+    ('age', 'trestbps'),
+    ('age', 'fbs'),
+    ('sex', 'trestbps'),
+    ('trestbps', 'target'),
+    ('fbs', 'target'),
+    ('target', 'restecg'),
+    ('target', 'thalach'),
+    ('target', 'chol')
+])
+
+# Train the model using Maximum Likelihood Estimators
+print("\nLearning CPD using Maximum Likelihood Estimators...")
+model.fit(heart_disease, estimator=MaximumLikelihoodEstimator)
+
+# Perform inference
+print("\nInferencing with Bayesian Network...")
+HeartDisease_infer = VariableElimination(model)
+
+# Query 1: Probability of Heart Disease given age
+age_value = 58
+print(f"\n1. Probability of Heart Disease given Age = {age_value}")
+q1 = HeartDisease_infer.query(variables=['target'], evidence={'age': age_value})
+print("Probability of heart disease based on age:")
+for state_name, probability in zip(q1.state_names['target'], q1.values):
+    print(f"target={state_name}: {probability}")
+
+# Query 2: Probability of Heart Disease given cholesterol level
+chol_value = 212
+print(f"\n2. Probability of Heart Disease given Chol = {chol_value}")
+q2 = HeartDisease_infer.query(variables=['target'], evidence={'chol': chol_value})
+print("Probability of heart disease based on cholesterol level:")
+for state_name, probability in zip(q2.state_names['target'], q2.values):
+    print(f"target={state_name}: {probability}")
